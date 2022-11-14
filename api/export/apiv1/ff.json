@@ -1,0 +1,115 @@
+//is_empty - _not
+{
+    "_name": "filter",
+    "_not": {
+        "_contains": "_createdAt"
+    }
+}
+
+//any_of - __or
+{
+    "_name": "filter",
+    "_or": [
+        {
+            "_like": {
+                "_field": "title",
+                "_value": "IVI"
+            }
+        },
+        {
+            "_like": {
+                "_field": "title",
+                "_value": "Test"
+            }
+        }
+    ]
+}
+
+//all_of - _and
+        {
+            "_name": "filter",
+            "_and": [
+                {
+                    "_like": {
+                        "_field": "title",
+                        "_value": "IVI"
+                    }
+                },
+                {
+                    "_like": {
+                        "_field": "title",
+                        "_value": "Test"
+                    }
+                }
+            ]
+        }
+
+//none_of - 
+        {
+            "_name": "filter",
+            "_not": {
+                "_or": [
+                    {
+                        "_like": {
+                            "_field": "title",
+                            "_value": "IVI"
+                        }
+                    },
+                    {
+                        "_like": {
+                            "_field": "title",
+                            "_value": "Test"
+                        }
+                    }
+                ]
+            }
+        }
+
+
+        {
+            "query": [
+                {
+                    "_name": "listCase"
+                },
+                {
+                    "_name": "filter",
+                    "_and": [
+                        {
+                            "_field": "number",
+                            "_value": 0
+                        },
+                        {
+                            "_like": {
+                                "_field": "title",
+                                "_value": "uuuu"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "_name": "sort",
+                    "_fields": [
+                        {
+                            "flag": "desc"
+                        },
+                        {
+                            "startDate": "desc"
+                        }
+                    ]
+                },
+                {
+                    "_name": "page",
+                    "from": 0,
+                    "to": 15,
+                    "extraData": [
+                        "observableStats",
+                        "taskStats",
+                        "procedureCount",
+                        "isOwner",
+                        "shareCount",
+                        "permissions",
+                        "actionRequired"
+                    ]
+                }
+            ]
+        }
