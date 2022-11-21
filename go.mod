@@ -2,6 +2,10 @@ module gitlab.cloud.gcm/i.ippolitov/go-thehiveclient
 
 go 1.18
 
+retract (
+	v0.1.1
+	v0.1.0
+)
 require (
 	github.com/stretchr/testify v1.8.1
 	github.com/tidwall/gjson v1.14.3
