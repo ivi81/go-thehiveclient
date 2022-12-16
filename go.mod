@@ -6,12 +6,12 @@ retract (
 	v0.1.1
 	v0.1.0
 )
+
 require (
 	github.com/stretchr/testify v1.8.1
 	github.com/tidwall/gjson v1.14.3
 	gitlab.cloud.gcm/i.ippolitov/debugging v0.0.0-20221109122848-69aca373a7b8
-	gitlab.cloud.gcm/i.ippolitov/go-microconfig v0.0.0-20221121102624-6d46879ab1e0
-
+	gitlab.cloud.gcm/i.ippolitov/go-microconfig v0.0.0-20221123144640-a9ce17790ad6
 )
 
 require (
