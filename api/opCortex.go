@@ -15,52 +15,53 @@ import (
 )
 
 //RunResponder запуск респондера применительно к сущьности hive
-func (c *HiveApiClient) RunResponder(ctx context.Context, reqBody export.CortexResponderReq) (*export.CortexResponderResult, error) {
+func (c *HiveApiClient) RunResponder(ctx context.Context, reqBody export.CortexResponderReq) (result *export.CortexResponderResult, err error) {
 	var (
-		err error
-		//req    *http.Request
-		res    *resp.Response
-		result export.CortexResponderResult
+		res *resp.Response
 	)
+
+	fName, pName := debugging.GetShortFuncNameAndPckage()
 
 	endPoint := fmt.Sprintf("http://%s/%s", c.Url, cons.URICortexAction)
 
 	if res, err = c.doApiRequest(ctx, endPoint, http.MethodPost, reqBody); err != nil {
-		return nil, fmt.Errorf("%s : %s", debugging.GetFuncName(), err.Error())
+		err = fmt.Errorf("package: %s, function: %s, %s", fName, pName, err.Error())
+		return
 	}
 
 	if err = json.Unmarshal(res.Data, result); err != nil {
-		err = fmt.Errorf("unmarshal Error : %s : %s", debugging.GetFuncName(), err.Error())
+		err = fmt.Errorf("function: %s , %s", fName, err.Error())
 	}
 
-	return &result, err
+	return
 }
 
 //ListResonderAction список респондеров отработавших для сущьности с указанным entityId
-func (c *HiveApiClient) ListResonderAction(ctx context.Context, hiveEntity common.ObjectType, entityId string) ([]export.CortexResponderResult, error) {
+func (c *HiveApiClient) ListResonderAction(ctx context.Context, hiveEntity common.ObjectType, entityId string) (result []export.CortexResponderResult, err error) {
 	var (
-		err error
-		//req    *http.Request
-		res    *resp.Response
-		result []export.CortexResponderResult
+		res *resp.Response
 	)
+
+	fName, pName := debugging.GetShortFuncNameAndPckage()
 
 	switch hiveEntity {
 	case common.HIVECASE, common.HIVEALERT, common.HIVETASK, common.HIVETASKLOG:
 		endPoint := fmt.Sprintf("http://%s/%s", c.Url, cons.URICortexActionEntityId.Replace(hiveEntity.String(), entityId))
 
 		if res, err = c.doApiRequest(ctx, endPoint, http.MethodGet, nil); err != nil {
-			return nil, fmt.Errorf("%s : %s", debugging.GetFuncName(), err.Error())
+			err = fmt.Errorf("package: %s, function: %s, %s", fName, pName, err.Error())
+			return
 		}
 
 		if err = json.Unmarshal(res.Data, result); err != nil {
-			err = fmt.Errorf("unmarshal Error : %s : %s", debugging.GetFuncName(), err.Error())
+			err = fmt.Errorf("package: %s, function: %s, %s", fName, pName, err.Error())
 		}
 
-		return result, err
+		return
 	}
 
-	return nil, fmt.Errorf("Hive type object %s is not valid for %s", hiveEntity, debugging.GetFuncName())
+	err = fmt.Errorf("package: %s, function: %s, not valid hive type object: %s", fName, pName, hiveEntity)
+	return
 	// /api/connector/cortex/action/case_task_log/{id} id: Log identifier
 	// /api/connector/cortex/action/case/{id} id: Case identifier
 	// /api/connector/cortex/action/responder/alert/{id} id: Alert identifier

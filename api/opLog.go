@@ -17,69 +17,72 @@ import (
 )
 
 //AddLog добавление Log-а в Task
-func (c *HiveApiClient) AddLog(ctx context.Context, taskId string, reqBody export.HiveLogReq) (*export.HiveLog, error) {
+func (c *HiveApiClient) AddLog(ctx context.Context, taskId string, reqBody export.HiveLogReq) (result *export.HiveLog, err error) {
 	var (
-		err error
-		//req    *http.Request
-		res    *resp.Response
-		result *export.HiveLog
+		res *resp.Response
 	)
+
+	fName, pName := debugging.GetShortFuncNameAndPckage()
 
 	endPoint := fmt.Sprintf("http://%s/%s/log", c.Url, cons.URITaskId.Replace(taskId))
 
 	if res, err = c.doApiRequest(ctx, endPoint, http.MethodPost, reqBody); err != nil {
-		return nil, fmt.Errorf("%s : %s", debugging.GetFuncName(), err.Error())
+		err = fmt.Errorf("package: %s, function: %s, %s", fName, pName, err.Error())
+		return
 	}
-
+	result = &export.HiveLog{}
 	if err = json.Unmarshal(res.Data, result); err != nil {
-		err = fmt.Errorf("unmarshal Error : %s : %s", debugging.GetFuncName(), err.Error())
+		err = fmt.Errorf("package: %s, function: %s, %s", fName, pName, err.Error())
 	}
 
-	return result, err
+	return
 }
 
 //DeleteLog удаление Log-а по его id
-func (c *HiveApiClient) DeleteLog(ctx context.Context, logId string) (bool, error) {
+func (c *HiveApiClient) DeleteLog(ctx context.Context, logId string) (result bool, err error) {
 	var (
-		err error
-		//req    *http.Request
 		res *resp.Response
 	)
 
+	fName, pName := debugging.GetShortFuncNameAndPckage()
+
 	endPoint := fmt.Sprintf("http://%s/%s/log", c.Url, cons.URILogId.Replace(logId))
 
+	result = false
 	if res, err = c.doApiRequest(ctx, endPoint, http.MethodDelete, nil); err != nil {
-		return false, fmt.Errorf("%s : %s", debugging.GetFuncName(), err.Error())
+		err = fmt.Errorf("package: %s, function: %s, %s", fName, pName, err.Error())
+		return
 	}
 
-	if res.Data == nil {
-		return false, nil
+	if res.Data != nil {
+		result = true
 	}
 
-	return true, err
+	return
 }
 
 //ListTaskLogs получения списка Log-ов связанных с Task-ом имеющим указанный taskId
-func (c *HiveApiClient) ListTaskLogs(ctx context.Context, taskId string, filter interface{}, sort []apiv1.E, page *apiv1.Page) ([]export.HiveLog, error) {
+func (c *HiveApiClient) ListTaskLogs(ctx context.Context, taskId string, filter interface{}, sort []apiv1.E, page *apiv1.Page) (result []export.HiveLog, err error) {
 	var (
-		err error
-		//req    *http.Request
-		res    *resp.Response
-		result []export.HiveLog
+		res *resp.Response
 	)
 
 	operation := apiv1.Operation{v1const.GetTask, taskId, v1const.Logs}
 	query := apiv1.CreateQueryApiV1Req(operation, filter, sort, page)
 
 	endPoint := fmt.Sprintf("http://%s/%s", c.Url, cons.URIAPIv1Query)
+
+	fName, pName := debugging.GetShortFuncNameAndPckage()
+
 	if res, err = c.doApiRequest(ctx, endPoint, http.MethodPost, query); err != nil {
-		return nil, fmt.Errorf("%s : %s", debugging.GetFuncName(), err.Error())
+		err = fmt.Errorf("package: %s, function: %s, %s", fName, pName, err.Error())
+		return
 	}
 	//result := gjson.ParseBytes()
 
 	if err = json.Unmarshal(res.Data, &result); err != nil {
-		err = fmt.Errorf("Error in function: %s : %s", debugging.GetFuncName(), err.Error())
+		err = fmt.Errorf("package: %s, function: %s, %s", fName, pName, err.Error())
 	}
 
-	return result, err
+	return
 }

@@ -18,147 +18,137 @@ import (
 )
 
 //CreateCase операция создания Case
-func (c *HiveApiClient) CreateCase(ctx context.Context, reqBody export.HiveCaseReq) (*export.HiveCase, error) {
+func (c *HiveApiClient) CreateCase(ctx context.Context, reqBody export.HiveCaseReq) (result *export.HiveCase, err error) {
 
 	var (
-		err error
-		//req    *http.Request
-		res    *resp.Response
-		result export.HiveCase
-	)
-
-	endPoint := fmt.Sprintf("http://%s/%s/", c.Url, cons.URICase)
-	if res, err = c.doApiRequest(ctx, endPoint, http.MethodPost, reqBody); err != nil {
-		return nil, fmt.Errorf("%s : %s", debugging.GetFuncName(), err.Error())
-	}
-	/*	var buf bytes.Buffer
-		if err = json.NewEncoder(&buf).Encode(reqBody); err != nil {
-			return nil, fmt.Errorf("%s : %s", debugging.GetFuncName(), err.Error())
-		}
-
-		if req, err = http.NewRequestWithContext(ctx, http.MethodPost, endPoint, &buf); err != nil {
-			return nil, fmt.Errorf("%s : %s", debugging.GetFuncName(), err.Error())
-		}
-
-		response, err := c.Client.Do(req)
-		if err != nil {
-			return nil, fmt.Errorf("%s : %s", debugging.GetFuncName(), err.Error())
-		}
-
-		if res, err = resp.Handler(response); err != nil {
-			return nil, err
-		}
-	*/
-	if err = json.Unmarshal(res.Data, result); err != nil {
-		err = fmt.Errorf("unmarshal Error : %s : %s", debugging.GetFuncName(), err.Error())
-	}
-
-	return &result, err
-}
-
-//UpdateCase операция изменения Case
-func (c *HiveApiClient) UpdateCase(ctx context.Context, caseId string, reqBody export.HiveCaseReq) (*export.HiveCase, error) {
-	var (
-		err error
-		//	req    *http.Request
-		res    *resp.Response
-		result export.HiveCase
-	)
-
-	endPoint := fmt.Sprintf("http://%s/%s/", c.Url, cons.URICaseId.Replace(caseId))
-	if res, err = c.doApiRequest(ctx, endPoint, http.MethodPatch, reqBody); err != nil {
-		return nil, fmt.Errorf("%s : %s", debugging.GetFuncName(), err.Error())
-	}
-
-	if err = json.Unmarshal(res.Data, result); err != nil {
-		err = fmt.Errorf("unmarshal Error : %s : %s", debugging.GetFuncName(), err.Error())
-	}
-
-	return &result, err
-}
-
-//DeleteCase операция удаления Case
-func (c *HiveApiClient) DeleteCase(ctx context.Context, caseId string) (bool, error) {
-	var (
-		err error
-		//req *http.Request
 		res *resp.Response
 	)
 
-	endPoint := fmt.Sprintf("http://%s/%s/?force=1", c.Url, cons.URICaseId.Replace(caseId))
-	if res, err = c.doApiRequest(ctx, endPoint, http.MethodDelete, nil); err != nil {
-		return false, fmt.Errorf("%s : %s", debugging.GetFuncName(), err.Error())
-	}
-	if res.Data == nil {
-		return false, nil
+	fName, pName := debugging.GetShortFuncNameAndPckage()
+
+	endPoint := fmt.Sprintf("http://%s/%s/", c.Url, cons.URICase)
+
+	if res, err = c.doApiRequest(ctx, endPoint, http.MethodPost, reqBody); err != nil {
+		err = fmt.Errorf("package: %s, function: %s, %s", fName, pName, err.Error())
+		return
 	}
 
-	return true, err
+	if err = json.Unmarshal(res.Data, result); err != nil {
+		err = fmt.Errorf("package: %s, function: %s, %s", fName, pName, err.Error())
+	}
+
+	return
+}
+
+//UpdateCase операция изменения Case
+func (c *HiveApiClient) UpdateCase(ctx context.Context, caseId string, reqBody export.HiveCaseReq) (result *export.HiveCase, err error) {
+	var (
+		res *resp.Response
+	)
+
+	fName, pName := debugging.GetShortFuncNameAndPckage()
+
+	endPoint := fmt.Sprintf("http://%s/%s/", c.Url, cons.URICaseId.Replace(caseId))
+	if res, err = c.doApiRequest(ctx, endPoint, http.MethodPatch, reqBody); err != nil {
+		err = fmt.Errorf("package: %s, function: %s, %s", fName, pName, err.Error())
+		return
+	}
+
+	if err = json.Unmarshal(res.Data, result); err != nil {
+		err = fmt.Errorf("function: %s , %s", fName, err.Error())
+	}
+
+	return
+}
+
+//DeleteCase операция удаления Case
+func (c *HiveApiClient) DeleteCase(ctx context.Context, caseId string) (result bool, err error) {
+	var (
+		res *resp.Response
+	)
+
+	fName, pName := debugging.GetShortFuncNameAndPckage()
+
+	endPoint := fmt.Sprintf("http://%s/%s/?force=1", c.Url, cons.URICaseId.Replace(caseId))
+
+	result = false
+
+	if res, err = c.doApiRequest(ctx, endPoint, http.MethodDelete, nil); err != nil {
+		err = fmt.Errorf("package: %s, function: %s, %s", fName, pName, err.Error())
+		return
+	}
+
+	if res.Data != nil {
+		result = true
+	}
+
+	return
 }
 
 //MergeCase операция объединения двух Case-ов в одни
-func (c *HiveApiClient) MergeCase(ctx context.Context, caseId1, caseId2 string) (*export.HiveCase, error) {
+func (c *HiveApiClient) MergeCase(ctx context.Context, caseId1, caseId2 string) (result *export.HiveCase, err error) {
 
 	var (
-		err error
-		//	req    *http.Request
-		res    *resp.Response
-		result export.HiveCase
+		res *resp.Response
 	)
+
+	fName, pName := debugging.GetShortFuncNameAndPckage()
 
 	endPoint := fmt.Sprintf("http://%s/%s", c.Url, cons.URIMergeCase.Replace(caseId1, caseId2))
 
 	if res, err = c.doApiRequest(ctx, endPoint, http.MethodPost, nil); err != nil {
-		return nil, fmt.Errorf("%s : %s", debugging.GetFuncName(), err.Error())
+		err = fmt.Errorf("package: %s, function: %s, %s", fName, pName, err.Error())
+		return
 	}
 
 	if err = json.Unmarshal(res.Data, result); err != nil {
-		err = fmt.Errorf("unmarshal Error : %s : %s", debugging.GetFuncName(), err.Error())
+		err = fmt.Errorf("function: %s , %s", fName, err.Error())
 	}
 
-	return &result, err
+	return
 }
 
 //ExportCaseToMISP операция экспортирования Case-а в MISP
-func (c *HiveApiClient) ExportCaseToMISP(ctx context.Context, caseId string, mispServer string) (bool, error) {
+func (c *HiveApiClient) ExportCaseToMISP(ctx context.Context, caseId string, mispServer string) (result bool, err error) {
 	var (
-		err error
 		res *resp.Response
 		//req *http.Request
 	)
+	fName, pName := debugging.GetShortFuncNameAndPckage()
 
 	endPoint := fmt.Sprintf("http://%s/%s", c.Url, cons.URIMispExport.Replace(caseId, mispServer))
+	result = false
 
 	if res, err = c.doApiRequest(ctx, endPoint, http.MethodPost, nil); err != nil {
-		return false, fmt.Errorf("%s : %s", debugging.GetFuncName(), err.Error())
+		err = fmt.Errorf("package: %s, function: %s, %s", fName, pName, err.Error())
+		return
 	}
-	if res.Data == nil {
-		return false, nil
+	if res.Data != nil {
+		result = true
 	}
 
-	return true, err
+	return
 }
 
 //ListRelatedCases операция получения Case-ов связанных с текущим
-func (c *HiveApiClient) ListRelatedCases(ctx context.Context, caseId string) ([]export.HiveCase, error) {
+func (c *HiveApiClient) ListRelatedCases(ctx context.Context, caseId string) (result []export.HiveCase, err error) {
 	var (
-		err error
-		//req    *http.Request
-		res    *resp.Response
-		result []export.HiveCase
+		res *resp.Response
 	)
+	fName, pName := debugging.GetShortFuncNameAndPckage()
 
 	endPoint := path.Join("http://"+c.Url, cons.URICaseId.Replace(caseId), "links")
 
 	if res, err = c.doApiRequest(ctx, endPoint, http.MethodGet, nil); err != nil {
-		return nil, fmt.Errorf("%s : %s", debugging.GetFuncName(), err.Error())
+		err = fmt.Errorf("package: %s, function: %s, %s", fName, pName, err.Error())
+		return
 	}
 
 	if err = json.Unmarshal(res.Data, result); err != nil {
-		err = fmt.Errorf("unmarshal Error : %s : %s", debugging.GetFuncName(), err.Error())
+		err = fmt.Errorf("function: %s , %s", fName, err.Error())
 	}
 
-	return result, err
+	return
 }
 
 //ListRelatedAlerts

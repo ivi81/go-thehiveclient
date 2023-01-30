@@ -10,12 +10,14 @@ import (
 	"strings"
 
 	"gitlab.cloud.gcm/i.ippolitov/go-thehiveclient/api/resp"
+	"gitlab.cloud.gcm/i.ippolitov/go-thehiveclient/logger"
 )
 
 type HiveApiClient struct {
 	Client *http.Client
 	Header *http.Header
 	Url    string
+	log    logger.Logger
 }
 
 //doApiRequest - выполняет сконфигурированный запрос к api Hive
