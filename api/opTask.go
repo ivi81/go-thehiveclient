@@ -16,10 +16,18 @@ import (
 )
 
 //CreateTask создает Task в заданном Case
-func (c *HiveApiClient) CreateTask(ctx context.Context, caseId string, reqBody *export.HiveTaskReq) (result *export.HiveTask, err error) {
-	var (
-		res *resp.Response
-	)
+//  параметры:
+//  ctx      - контекст
+//  caseId   - id hive Сase-а
+//  reqBody  - тело запроса содержащего условия создания Case-а
+func (c *HiveApiClient) CreateTask(
+	ctx context.Context,
+	caseId string,
+	reqBody *export.HiveTaskReq,
+) (result *export.HiveTask, err error) {
+
+	var res *resp.Response
+	result = &export.HiveTask{}
 
 	endPoint := fmt.Sprintf("http://%s/%s/task", c.Url, cons.URICaseId.Replace(caseId))
 
@@ -38,9 +46,18 @@ func (c *HiveApiClient) CreateTask(ctx context.Context, caseId string, reqBody *
 }
 
 //UpdateTask изменение значений полей Task-а
-func (c *HiveApiClient) UpdateTask(ctx context.Context, taskId string, reqBody *export.HiveTaskReq) (result *export.HiveTask, err error) {
+//  параметры:
+//  ctx      - контекст
+//  taskId   - id hive Task-а
+//  reqBody  - тело запроса содержащего изменяемые поля  Task-а
+func (c *HiveApiClient) UpdateTask(
+	ctx context.Context,
+	taskId string,
+	reqBody *export.HiveTaskReq,
+) (result *export.HiveTask, err error) {
 
 	var res *resp.Response
+	result = &export.HiveTask{}
 
 	endPoint := fmt.Sprintf("http://%s/%s", c.Url, cons.URITaskId.Replace(taskId))
 
@@ -59,10 +76,16 @@ func (c *HiveApiClient) UpdateTask(ctx context.Context, taskId string, reqBody *
 }
 
 //GetTask получение полей Task-а
-func (c *HiveApiClient) GetTask(ctx context.Context, taskId string) (result *export.HiveTask, err error) {
-	var (
-		res *resp.Response
-	)
+//  параметры:
+//  ctx      - контекст
+//  taskId   - id hive Task-а
+func (c *HiveApiClient) GetTask(
+	ctx context.Context,
+	taskId string,
+) (result *export.HiveTask, err error) {
+
+	var res *resp.Response
+	result = &export.HiveTask{}
 
 	endPoint := fmt.Sprintf("http://%s/%s", c.Url, cons.URITaskId.Replace(taskId))
 
@@ -81,11 +104,19 @@ func (c *HiveApiClient) GetTask(ctx context.Context, taskId string) (result *exp
 }
 
 //ListCaseTask получение списка Task-ов связанных с указанным Case-ом
-func (c *HiveApiClient) ListCaseTask(ctx context.Context, caseId string, filter interface{}, sort []apiv1.E, page *apiv1.Page) (result []export.HiveTask, err error) {
+//  параметры:
+//  ctx      - контекст
+//  caseId   - id hive Сase-а
+//  filter   - параметры поиска Task-ов
+//  sort     - параметры сортировки результата
+func (c *HiveApiClient) ListCaseTask(
+	ctx context.Context,
+	caseId string,
+	filter interface{},
+	sort []apiv1.E, page *apiv1.Page,
+) (result []export.HiveTask, err error) {
 
-	var (
-		res *resp.Response
-	)
+	var res *resp.Response
 
 	operation := apiv1.Operation{v1const.GetCase, caseId, v1const.Tasks}
 	query := apiv1.CreateQueryApiV1Req(operation, filter, sort, page)
