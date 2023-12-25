@@ -8,6 +8,7 @@ retract (
 )
 
 require (
+	github.com/ivi81/enummethods v0.0.0-20231222140917-ea2d2c0292ad
 	github.com/stretchr/testify v1.8.1
 	github.com/tidwall/gjson v1.14.3
 	gitlab.cloud.gcm/i.ippolitov/debugging v0.0.0-20221228134820-0c3b0db517aa
