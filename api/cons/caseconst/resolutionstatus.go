@@ -1,12 +1,8 @@
+//resolutionstatus.go - содержит константы описывающие подтверждение успешность зарегистрированного КВ в карточке сущьности Case в IRP the Hive.
 package caseconst
 
-import (
-	"strings"
-
-	"gitlab.cloud.gcm/i.ippolitov/go-thehiveclient/api/cons/common"
-)
-
 //go:generate stringer -type=ResolutionStatus
+//go:generate enummethods -type=ResolutionStatus
 type ResolutionStatus int
 
 const (
@@ -16,40 +12,3 @@ const (
 	Other
 	Duplicated
 )
-
-func (m ResolutionStatus) IsValid() bool {
-
-	switch m {
-	case
-		Indeterminate,
-		FalsePositive,
-		TruePositive,
-		Other,
-		Duplicated:
-		return true
-	}
-	return false
-}
-
-//SetValue конвертация строки в значение типа
-func (m *ResolutionStatus) SetValue(s string) bool {
-	i := strings.Index(_ResolutionStatus_name, s)
-	if i != -1 {
-
-		for index, v := range _Status_index {
-			if i-int(v) == 0 {
-				*m = ResolutionStatus(index)
-				return true
-			}
-		}
-	}
-	return false
-}
-
-func (m ResolutionStatus) MarshalJSON() ([]byte, error) {
-	return common.MarshalConstantJSON(m)
-}
-
-func (m *ResolutionStatus) UnmarshalJSON(data []byte) error {
-	return common.UnmarshalConstantJSON(m, data)
-}

@@ -1,3 +1,5 @@
+//const.go - содержит описание интерфейсов которому должны соответствовать описываемые константами пречислимые типы
+//DEPRICATED. Было перенесено в github.com/ivi81/enummethods
 package common
 
 import (
@@ -67,4 +69,3 @@ func UnmarshalConstantJSON(c ConstantUnstringer, data []byte) error {
 	}
 	return err
 }
-

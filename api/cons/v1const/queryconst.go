@@ -1,12 +1,8 @@
+//queryconst.go - содежит константы необходимые для указания в запросе к api действия c данными
 package v1const
 
-import (
-	"strings"
-
-	"gitlab.cloud.gcm/i.ippolitov/go-thehiveclient/api/cons/common"
-)
-
 //go:generate stringer -type=QueryConst
+//go:generate enummethods -type=QueryConst
 
 type QueryConst int
 
@@ -165,32 +161,10 @@ func (m QueryConst) IsOtherOperation() bool {
 }
 
 //IsValid проверка корректности значения
-func (m QueryConst) IsValid() bool {
+/*func (m QueryConst) IsValid() bool {
 	if m.IsGetOperation() || m.IsListOperation() || m.IsOtherOperation() {
 		return true
 	}
 	return false
 }
-
-//SetValue конвертация строки в значение типа
-func (m *QueryConst) SetValue(s string) bool {
-	i := strings.Index(_QueryConst_name, s)
-	if i != -1 {
-
-		for index, v := range _QueryConst_index {
-			if i-int(v) == 0 {
-				*m = QueryConst(index)
-				return true
-			}
-		}
-	}
-	return false
-}
-
-func (m QueryConst) MarshalJSON() ([]byte, error) {
-	return common.MarshalConstantJSON(m)
-}
-
-func (m *QueryConst) UnmarshalJSON(data []byte) error {
-	return common.UnmarshalConstantJSON(m, data)
-}
+*/

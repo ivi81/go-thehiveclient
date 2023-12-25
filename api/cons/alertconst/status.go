@@ -1,3 +1,4 @@
+//status.go - содержит константы описывающие состояния сущьностей Alert в IRP the Hive.
 package alertconst
 
 //go:generate stringer -type=Status

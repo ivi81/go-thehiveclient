@@ -1,15 +1,12 @@
+//filterconst.go - содежит константы необходимые для конструирования в коде фильтров применяемых в запросах
+//к api IRP the Hive
 package v1const
 
-import (
-	"strings"
-
-	"gitlab.cloud.gcm/i.ippolitov/go-thehiveclient/api/cons/common"
-)
-
-////go:generate jsonenums -type=FilterConst
 //go:generate stringer -type=FilterConst
+//go:generate enummethods -type=FilterConst
 type FilterConst int
 
+//названия которые используются для конструирования текста запросов
 const (
 	_lt = FilterConst(iota)
 	_lte
@@ -28,6 +25,7 @@ const (
 	_to
 )
 
+//Экспортируемые названия которые применяются в непосредственно в коде
 const (
 	LT       = _lt
 	LTE      = _lte
@@ -45,52 +43,3 @@ const (
 	FROM     = _from
 	TO       = _to
 )
-
-//IsValid проверка корректности значения
-func (m FilterConst) IsValid() bool {
-
-	switch m {
-	case
-		LT,
-		LTE,
-		GT,
-		GTE,
-		NE,
-		NOT,
-		AND,
-		OR,
-		BETWEEN,
-		LIKE,
-		CONTAINS,
-		FIELD,
-		VALUE,
-		FROM,
-		TO:
-
-		return true
-	}
-	return false
-}
-
-//SetValue конвертация строки в значение типа
-func (m *FilterConst) SetValue(s string) bool {
-	i := strings.Index(_FilterConst_name, s)
-	if i != -1 {
-
-		for index, v := range _FilterConst_index {
-			if i-int(v) == 0 {
-				*m = FilterConst(index)
-				return true
-			}
-		}
-	}
-	return false
-}
-
-func (m FilterConst) MarshalJSON() ([]byte, error) {
-	return common.MarshalConstantJSON(m)
-}
-
-func (m *FilterConst) UnmarshalJSON(data []byte) error {
-	return common.UnmarshalConstantJSON(m, data)
-}
