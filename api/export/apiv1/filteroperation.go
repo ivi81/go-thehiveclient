@@ -80,6 +80,7 @@ func Gte(field string, value interface{}) E {
 func Ne(field string, value interface{}) E {
 	return unaryContructor(v1const.NE, field, value)
 }
+//unaryContructor - конструктор 
 func unaryContructor(op v1const.FilterConst, key string, value interface{}) E {
 	return E{op, E{key, value}}
 }

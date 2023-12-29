@@ -83,7 +83,6 @@ func (m *M) Attach(elem ...interface{}) {
 			m.AddE(val)
 		}
 	}
-
 }
 
 //ToSlice переводит M -> D
