@@ -1,4 +1,4 @@
-//opTask.go - содержит методы структуры HiveApiClient реализующие операций с сущьностями Task
+// opTask.go - содержит методы структуры HiveApiClient реализующие операций с сущьностями Task
 package api
 
 import (
@@ -15,11 +15,12 @@ import (
 	"gitlab.cloud.gcm/i.ippolitov/go-thehiveclient/api/resp"
 )
 
-//CreateTask создает Task в заданном Case
-//  параметры:
-//  ctx      - контекст
-//  caseId   - id hive Сase-а
-//  reqBody  - тело запроса содержащего условия создания Case-а
+// CreateTask создает Task в заданном Case
+//
+//	параметры:
+//	ctx      - контекст
+//	caseId   - id hive Сase-а
+//	reqBody  - тело запроса содержащего условия создания Case-а
 func (c *HiveApiClient) CreateTask(
 	ctx context.Context,
 	caseId string,
@@ -45,11 +46,12 @@ func (c *HiveApiClient) CreateTask(
 	return
 }
 
-//UpdateTask изменение значений полей Task-а
-//  параметры:
-//  ctx      - контекст
-//  taskId   - id hive Task-а
-//  reqBody  - тело запроса содержащего изменяемые поля  Task-а
+// UpdateTask изменение значений полей Task-а
+//
+//	параметры:
+//	ctx      - контекст
+//	taskId   - id hive Task-а
+//	reqBody  - тело запроса содержащего изменяемые поля  Task-а
 func (c *HiveApiClient) UpdateTask(
 	ctx context.Context,
 	taskId string,
@@ -75,10 +77,11 @@ func (c *HiveApiClient) UpdateTask(
 	return
 }
 
-//GetTask получение полей Task-а
-//  параметры:
-//  ctx      - контекст
-//  taskId   - id hive Task-а
+// GetTask получение полей Task-а
+//
+//	параметры:
+//	ctx      - контекст
+//	taskId   - id hive Task-а
 func (c *HiveApiClient) GetTask(
 	ctx context.Context,
 	taskId string,
@@ -103,12 +106,13 @@ func (c *HiveApiClient) GetTask(
 	return
 }
 
-//ListCaseTask получение списка Task-ов связанных с указанным Case-ом
-//  параметры:
-//  ctx      - контекст
-//  caseId   - id hive Сase-а
-//  filter   - параметры поиска Task-ов
-//  sort     - параметры сортировки результата
+// ListCaseTask получение списка Task-ов связанных с указанным Case-ом
+//
+//	параметры:
+//	ctx      - контекст
+//	caseId   - id hive Сase-а
+//	filter   - параметры поиска Task-ов
+//	sort     - параметры сортировки результата
 func (c *HiveApiClient) ListCaseTask(
 	ctx context.Context,
 	caseId string,
@@ -118,7 +122,7 @@ func (c *HiveApiClient) ListCaseTask(
 
 	var res *resp.Response
 
-	operation := apiv1.Operation{v1const.GetCase, caseId, v1const.Tasks}
+	operation := apiv1.Operation{Op: v1const.GetCase, IdOrName: caseId, SubOp: v1const.Tasks}
 	query := apiv1.CreateQueryApiV1Req(operation, filter, sort, page)
 
 	endPoint := fmt.Sprintf("http://%s/%s", c.Url, cons.URIAPIv1Query)

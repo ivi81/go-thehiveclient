@@ -36,7 +36,7 @@ type D []E
 
 func (e E) KeyToString() string {
 	switch vv := e.Key.(type) {
-	case enumerator.Enumerator: //common.ConstantStringer:
+	case enumerator.Stringer: //enumerator.Enumerator: //common.ConstantStringer:
 		return vv.String()
 	case string:
 		return vv
