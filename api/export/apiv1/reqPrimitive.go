@@ -1,14 +1,15 @@
-//reqPrimitive.go  - содержит структуры примитвов данных применяемых при постороении запроса к apiv1
+// reqPrimitive.go  - содержит структуры примитвов данных применяемых при постороении запроса к apiv1
 package apiv1
 
 import (
 	"encoding/json"
 	"fmt"
 
-	"gitlab.cloud.gcm/i.ippolitov/go-thehiveclient/api/cons/common"
+	"github.com/ivi81/enummethods/enumerator"
+	//"gitlab.cloud.gcm/i.ippolitov/go-thehiveclient/api/cons/common"
 )
 
-//E - примитив описывающий поле json-документа в виде ключ значение, при Marshal-инге получаем {Key:Value}
+// E - примитив описывающий поле json-документа в виде ключ значение, при Marshal-инге получаем {Key:Value}
 type E struct {
 	Key   interface{}
 	Value interface{}
@@ -29,13 +30,13 @@ func (fp E) MarshalJSON() ([]byte, error) {
 	return []byte(s), nil
 }
 
-//D - примитив описывающий массив элементов представленных в виде {Key:Value} в json-документе,
-//где Value произвольный json-документ при при Marshal-инге получаем [{Key1:Value1},{Key2:Value2},...]
+// D - примитив описывающий массив элементов представленных в виде {Key:Value} в json-документе,
+// где Value произвольный json-документ при Marshal-инге получаем [{Key1:Value1},{Key2:Value2},...]
 type D []E
 
 func (e E) KeyToString() string {
 	switch vv := e.Key.(type) {
-	case common.ConstantStringer:
+	case enumerator.Enumerator: //common.ConstantStringer:
 		return vv.String()
 	case string:
 		return vv
@@ -58,7 +59,7 @@ if ok
 //при при Marshal-инге получаем {MapKey1:Value1,MapKey2:Value2,...}
 type M map[string]interface{}
 
-//AddE добавить елемент типа Е в M
+// AddE добавить елемент типа Е в M
 func (m *M) AddE(elem E) {
 	strKey := elem.KeyToString()
 	if strKey != "" {
@@ -66,7 +67,7 @@ func (m *M) AddE(elem E) {
 	}
 }
 
-//Attach добавить в M новые элементы трансформировав их из элементов D, E
+// Attach добавить в M новые элементы трансформировав их из элементов D, E
 func (m *M) Attach(elem ...interface{}) {
 
 	for _, v := range elem {
@@ -97,5 +98,5 @@ func (m *M) Attach(elem ...interface{}) {
 //AddToMap производит добавление структуры данных составленной из произвольных компбинаций типов E,D,M к текущему экземпляру M
 //func (m *M) AddToMap(interface{})
 
-//A  - примитив описывающий массив произвольных json-документов
+// A  - примитив описывающий массив произвольных json-документов
 type A []interface{}
