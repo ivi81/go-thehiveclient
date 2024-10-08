@@ -6,20 +6,20 @@ import (
 	"gitlab.cloud.gcm/i.ippolitov/go-thehiveclient/api/cons/common"
 )
 
-//ResponderReq  описывает атрибуты для запроса на запуск responder
-//- ResponderId идентификатор респондера
-//- ObjectType тип сущьности hive к которой применяется респондер
-//- ObjectId уникальный внутренний идентификатор сущьности "_id"
-//- CortexId идетификатор cortex
-//Обязательные поля (responderId, objectType and objectId)
+// ResponderReq  описывает атрибуты для запроса на запуск responder
+// - ResponderId идентификатор респондера
+// - ObjectType тип сущьности hive к которой применяется респондер
+// - ObjectId уникальный внутренний идентификатор сущьности "_id"
+// - CortexId идетификатор cortex
+// Обязательные поля (responderId, objectType and objectId)
 type CortexResponderReq struct {
-	ResponderId string            `json:"responderId"`
-	ObjectType  common.ObjectType `json:"objectType"`
-	ObjectId    string            `json:"objectId"`
-	CortexId    string            `json:"cortexId,omitempty"`
+	ResponderId string                `json:"responderId"`
+	ObjectType  common.HiveObjectType `json:"objectType"`
+	ObjectId    string                `json:"objectId"`
+	CortexId    string                `json:"cortexId,omitempty"`
 }
 
-//CortexResponderResult описывает атрибуты ответа на запуск реподера либо получения списка отпработавших респондеров
+// CortexResponderResult описывает атрибуты ответа на запуск реподера либо получения списка отпработавших респондеров
 type CortexResponderResult struct {
 	CortexResponderReq
 	ResponderName       string        `json:"responderName"`
@@ -31,7 +31,7 @@ type CortexResponderResult struct {
 	Report              []interface{} `json:"report:omitempty"`
 }
 
-//CortexRespondersAction список респондеров
+// CortexRespondersAction список респондеров
 type ListCortexResponderAction []CortexResponderResult
 
 /*list available Responders#

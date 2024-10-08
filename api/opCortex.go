@@ -1,4 +1,4 @@
-//opLog.go - содержит методы структуры HiveApiClient реализующие операций функциями cortex (респондеры и ...)
+// opLog.go - содержит методы структуры HiveApiClient реализующие операций функциями cortex (респондеры и ...)
 package api
 
 import (
@@ -14,7 +14,7 @@ import (
 	"gitlab.cloud.gcm/i.ippolitov/go-thehiveclient/api/resp"
 )
 
-//RunResponder запуск респондера применительно к сущьности hive
+// RunResponder запуск респондера применительно к сущьности hive
 func (c *HiveApiClient) RunResponder(ctx context.Context, reqBody export.CortexResponderReq) (result *export.CortexResponderResult, err error) {
 	var (
 		res *resp.Response
@@ -36,8 +36,8 @@ func (c *HiveApiClient) RunResponder(ctx context.Context, reqBody export.CortexR
 	return
 }
 
-//ListResonderAction список респондеров отработавших для сущьности с указанным entityId
-func (c *HiveApiClient) ListResonderAction(ctx context.Context, hiveEntity common.ObjectType, entityId string) (result []export.CortexResponderResult, err error) {
+// ListResonderAction список респондеров отработавших для сущьности с указанным entityId
+func (c *HiveApiClient) ListResonderAction(ctx context.Context, hiveEntity common.HiveObjectType, entityId string) (result []export.CortexResponderResult, err error) {
 	var (
 		res *resp.Response
 	)
